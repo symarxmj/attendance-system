@@ -1,4 +1,4 @@
-package com.example.attendancesystem.model;
+package com.example.attendancesystem.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
