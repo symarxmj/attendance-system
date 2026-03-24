@@ -1,4 +1,5 @@
-# xuehao
-## xingming
-### xingzheng
+# JavaEE 课程代码
+## 学号：42411142  姓名：薛磊
+### 课程记录：
+2026年3月24日 学习分层解耦机制 将项目分为3层（模型层dao、业务层service、控制层controller）
 
