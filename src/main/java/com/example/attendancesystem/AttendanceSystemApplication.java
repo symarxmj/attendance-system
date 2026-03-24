@@ -15,18 +15,6 @@ public class AttendanceSystemApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(AttendanceSystemApplication.class, args);
-    }
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "欢迎来到班级考勤管理系统";
-    }
-
-    @GetMapping("/about")
-    public Map<String, String> getAbout() {
-        Map<String, String> info = new HashMap<>();
-        info.put("姓名", "薛磊");
-        info.put("专业", "人工智能");
-        return info;
     }
 }
