@@ -9,9 +9,11 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
-    private String studentId;
-    private String studentName;
-    private String gender;
+public class User {
+    private Integer id;
+    private String username;
+    private String password;
+    private String realName;
+    private String role;
     private LocalDateTime createTime;
 }

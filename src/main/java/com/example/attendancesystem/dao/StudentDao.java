@@ -1,36 +1,32 @@
 package com.example.attendancesystem.dao;
 
 import com.example.attendancesystem.entity.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
+@Mapper
 @Repository
-public class StudentDao {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    
-    public void insert(Student student) {
-        String sql = "INSERT INTO students (student_id, name, class_name, age) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, student.getStudentId(), student.getName(), student.getClassName(), student.getAge());
-    }
+public interface StudentDao {
 
-    public Student findById(String studentId) {
-        String sql = "SELECT * FROM students WHERE student_id = ?";
-        return jdbcTemplate.queryForObject(sql, new RowMapper<Student>() {
-            @Override
-            public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Student student = new Student();
-                student.setStudentId(rs.getString("student_id"));
-                student.setName(rs.getString("name"));
-                student.setClassName(rs.getString("class_name"));
-                student.setAge(rs.getInt("age"));
-                return student;
-            }
-        }, studentId);
-    }
+    @Insert("insert into student(student_id, student_name, gender, create_time) values(#{studentId}, #{studentName}, #{gender}, #{createTime})")
+    void insertStudent(Student student);
+
+    @Select("select student_id, student_name, gender, create_time from student where student_id = #{studentId}")
+    Student findStudentById(@Param("studentId") String studentId);
+
+    @Select("select * from student")
+    List<Student> findAll();
+
+    @Delete("delete from student where student_id = #{studentId}")
+    void delete(String studentId);
+
+    @Update("update student set student_name = #{studentName}, gender = #{gender} where student_id = #{studentId}")
+    void updateStudent(Student student);
 }

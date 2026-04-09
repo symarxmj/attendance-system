@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: attendance-system
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/attendance_system
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "060208"
+
+mybatis:
+  type-aliases-package: com.example.attendancesystem.entity
+  configuration:
+    map-underscore-to-camel-case: true
