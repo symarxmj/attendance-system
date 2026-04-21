@@ -15,7 +15,7 @@ public class StudentController {
     private StudentService studentService;
 
     // 新增学生
-    @PostMapping("/insert")
+    @PostMapping
     public Result insertStudent(@RequestBody Student student){
         System.out.println("新增学生信息：" + student);
         String message = studentService.insertStudent(student);
@@ -39,7 +39,7 @@ public class StudentController {
     }
 
     // 查询所有学生
-    @GetMapping("/findAll")
+    @GetMapping
     public Result findAll(){
         List<Student> studentList = studentService.findAll();
         return Result.success(studentList);

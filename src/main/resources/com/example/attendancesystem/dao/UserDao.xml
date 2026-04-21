@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendancesystem.dao.UserDao">
+    <insert id="insertUser">
+        insert into user(username, password, real_name, role, create_time)
+        values(#{username}, #{password}, #{realName}, #{role}, #{createTime})
+    </insert>
+    <delete id="delete">
+        delete from user
+        where username = #{username}
+    </delete>
+</mapper>
