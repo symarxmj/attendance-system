@@ -2,7 +2,12 @@ package com.example.attendancesystem.service.impl;
 
 import com.example.attendancesystem.dao.StudentDao;
 import com.example.attendancesystem.entity.Student;
+import com.example.attendancesystem.entity.StudentQueryParam;
 import com.example.attendancesystem.service.StudentService;
+import com.example.attendancesystem.util.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +28,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findStudentById(String studentId) {
-        return studentDao.findStudentById(studentId);
-    }
-
-    @Override
     public List<Student> findAll() {
         return studentDao.findAll();
     }
@@ -42,5 +42,18 @@ public class StudentServiceImpl implements StudentService {
     public String updateStudent(Student student) {
         studentDao.updateStudent(student);
         return "信息更新成功";
+    }
+
+    @Override
+    public PageResult<Student> page(StudentQueryParam studentQueryParam) {
+        // 设置分页参数
+        PageHelper.startPage(studentQueryParam.getPage(), studentQueryParam.getPageSize());
+
+        // 分页查询当前页数据
+        List<Student> studentList = studentDao.list(studentQueryParam);
+
+        // 封装为 PageResult 对象
+        Page<Student> page = (Page<Student>) studentList;
+        return new PageResult<>(page.getTotal(), page.getResult());
     }
 }

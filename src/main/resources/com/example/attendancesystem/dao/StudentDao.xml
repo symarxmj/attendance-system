@@ -7,18 +7,32 @@
         insert into student(student_id, student_name, gender, create_time)
         values(#{studentId}, #{studentName}, #{gender}, #{createTime})
     </insert>
-    
-    <select id="findStudentById" resultType="com.example.attendancesystem.entity.Student">
-        select student_id, student_name, gender, create_time
-        from student
-        where student_id = #{studentId}
+
+    <select id="list" resultType="com.example.attendancesystem.entity.Student">
+        select s.*
+        from student s
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and s.student_id = #{studentId}
+            </if>
+            <if test="studentName != null and studentName != ''">
+                and s.student_name like concat('%', #{studentName}, '%')
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="begin != null and end != null">
+                and create_time between #{begin} and #{end}
+            </if>
+        </where>
+        order by s.create_time desc
     </select>
 
     <delete id="delete">
         delete from student
         where student_id = #{studentId}
     </delete>
-    
+
     <update id="updateStudent">
         update student
         set student_name = #{studentName}, gender = #{gender}

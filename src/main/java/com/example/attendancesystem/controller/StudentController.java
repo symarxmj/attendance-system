@@ -1,6 +1,8 @@
 package com.example.attendancesystem.controller;
 
+import com.example.attendancesystem.entity.StudentQueryParam;
 import com.example.attendancesystem.service.StudentService;
+import com.example.attendancesystem.util.PageResult;
 import com.example.attendancesystem.util.Result;
 import com.example.attendancesystem.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +32,6 @@ public class StudentController {
         return Result.success(message);
     }
 
-    // 根据学号查询学生
-    @GetMapping("/{studentId}")
-    public Result findStudentById(@PathVariable String studentId) {
-        System.out.println("根据学号：" + studentId + "，查询学生信息");
-        Student student = studentService.findStudentById(studentId);
-        return Result.success(student);
-    }
-
     // 查询所有学生
     @GetMapping
     public Result findAll(){
@@ -52,5 +46,13 @@ public class StudentController {
         student.setStudentId(studentId);
         String message = studentService.updateStudent(student);
         return Result.success(message);
+    }
+
+    // 分页查询学生信息（支持筛选）
+    @GetMapping("/list")
+    public Result page(StudentQueryParam  studentQueryParam){
+        System.out.println("分页查询学生信息：" + studentQueryParam);
+        PageResult<Student> pageResult = studentService.page(studentQueryParam);
+        return Result.success(pageResult);
     }
 }
