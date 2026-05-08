@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.attendancesystem.dao.StudentDao">
+<mapper namespace="com.example.attendancesystem.mapper.StudentMapper">
     <insert id="insertStudent" parameterType="com.example.attendancesystem.entity.Student" useGeneratedKeys="true" keyProperty="id">
         insert into student(student_id, student_name, gender, create_time)
         values(#{studentId}, #{studentName}, #{gender}, #{createTime})

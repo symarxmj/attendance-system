@@ -6,6 +6,7 @@ import com.example.attendancesystem.util.PageResult;
 import com.example.attendancesystem.util.Result;
 import com.example.attendancesystem.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class StudentController {
     private StudentService studentService;
 
     // 新增学生
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PostMapping
     public Result insertStudent(@RequestBody Student student){
         System.out.println("新增学生信息：" + student);
@@ -25,6 +27,7 @@ public class StudentController {
     }
 
     // 根据学号删除学生
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @DeleteMapping("/{studentId}")
     public Result deleteStudent(@PathVariable String studentId){
         System.out.println("根据学号：" + studentId + "，删除学生信息");
@@ -33,6 +36,7 @@ public class StudentController {
     }
 
     // 查询所有学生
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     @GetMapping
     public Result findAll(){
         List<Student> studentList = studentService.findAll();
@@ -40,6 +44,7 @@ public class StudentController {
     }
 
     // 根据学号修改学生信息
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PutMapping("/{studentId}")
     public Result updateStudent(@PathVariable String studentId, @RequestBody Student student){
         System.out.println("根据学号：" + studentId + "，修改学生信息");
@@ -49,6 +54,7 @@ public class StudentController {
     }
 
     // 分页查询学生信息（支持筛选）
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     @GetMapping("/list")
     public Result page(StudentQueryParam  studentQueryParam){
         System.out.println("分页查询学生信息：" + studentQueryParam);

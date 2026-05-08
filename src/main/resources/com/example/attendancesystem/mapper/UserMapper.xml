@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.attendancesystem.dao.UserDao">
+<mapper namespace="com.example.attendancesystem.mapper.UserMapper">
     <insert id="insertUser">
         insert into user(username, password, real_name, role, create_time)
         values(#{username}, #{password}, #{realName}, #{role}, #{createTime})
@@ -11,4 +11,8 @@
         delete from user
         where username = #{username}
     </delete>
+    <select id="findByUsername" resultType="com.example.attendancesystem.entity.User">
+        select * from user
+        where username = #{username}
+    </select>
 </mapper>

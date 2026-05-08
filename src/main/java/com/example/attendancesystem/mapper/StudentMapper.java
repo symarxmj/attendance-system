@@ -1,4 +1,4 @@
-package com.example.attendancesystem.dao;
+package com.example.attendancesystem.mapper;
 
 import com.example.attendancesystem.entity.Student;
 import com.example.attendancesystem.entity.StudentQueryParam;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface StudentDao {
+public interface StudentMapper {
     void insertStudent(Student student);
 
     @Select("select * from student")

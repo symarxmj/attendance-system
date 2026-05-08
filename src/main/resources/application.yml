@@ -12,3 +12,6 @@ mybatis:
   type-aliases-package: com.example.attendancesystem.entity
   configuration:
     map-underscore-to-camel-case: true
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%thread] %logger{15} : %msg%n"
