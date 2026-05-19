@@ -16,4 +16,6 @@ public interface StudentService {
     String updateStudent(Student student);
 
     PageResult<Student> page(StudentQueryParam studentQueryParam);
+
+    Student findById(String studentId);
 }

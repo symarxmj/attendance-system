@@ -5,12 +5,14 @@ import com.example.attendancesystem.service.StudentService;
 import com.example.attendancesystem.util.PageResult;
 import com.example.attendancesystem.util.Result;
 import com.example.attendancesystem.entity.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -21,7 +23,7 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PostMapping
     public Result insertStudent(@RequestBody Student student){
-        System.out.println("新增学生信息：" + student);
+        log.info("新增学生信息：, {}",  student);
         String message = studentService.insertStudent(student);
         return Result.success(message);
     }
@@ -30,7 +32,7 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @DeleteMapping("/{studentId}")
     public Result deleteStudent(@PathVariable String studentId){
-        System.out.println("根据学号：" + studentId + "，删除学生信息");
+        log.info("删除学号为：{}的学生信息", studentId);
         String message = studentService.deleteStudent(studentId);
         return Result.success(message);
     }
@@ -43,11 +45,20 @@ public class StudentController {
         return Result.success(studentList);
     }
 
+    // 根据学号查询学生信息
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    @GetMapping("/{studentId}")
+    public Result findById(@PathVariable String studentId){
+        log.info("查询学号为：{}的学生信息", studentId);
+        Student student = studentService.findById(studentId);
+        return Result.success(student);
+    }
+
     // 根据学号修改学生信息
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PutMapping("/{studentId}")
     public Result updateStudent(@PathVariable String studentId, @RequestBody Student student){
-        System.out.println("根据学号：" + studentId + "，修改学生信息");
+        log.info("修改学号为：{}的学生信息", studentId);
         student.setStudentId(studentId);
         String message = studentService.updateStudent(student);
         return Result.success(message);
@@ -57,7 +68,7 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     @GetMapping("/list")
     public Result page(StudentQueryParam  studentQueryParam){
-        System.out.println("分页查询学生信息：" + studentQueryParam);
+        log.info("根据筛选信息分页查询学生信息，筛选信息为：{}", studentQueryParam);
         PageResult<Student> pageResult = studentService.page(studentQueryParam);
         return Result.success(pageResult);
     }

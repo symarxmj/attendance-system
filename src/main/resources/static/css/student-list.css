@@ -31,7 +31,7 @@ body {
     text-decoration: underline;
 }
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 24px auto;
     padding: 0 24px;
 }
@@ -145,4 +145,50 @@ tbody tr:last-child {
     text-align: center;
     padding: 40px;
     color: #999;
+}
+.action-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.btn-action {
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: opacity 0.2s;
+}
+.btn-action:hover {
+    opacity: 0.8;
+}
+.btn-edit {
+    background: #3498db;
+    color: #fff;
+}
+.btn-delete {
+    background: #e74c3c;
+    color: #fff;
+}
+.toast-notification {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27ae60;
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: 6px;
+    font-size: 14px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: opacity 0.3s;
+}
+.toast-notification.toast-fade {
+    opacity: 0;
+}
+.toast-notification.toast-error {
+    background: #e74c3c;
 }

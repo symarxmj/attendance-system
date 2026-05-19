@@ -23,7 +23,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         const data = await res.json();
 
         if (data.code === 1) {
-            alert('注册成功！即将跳转到登录页');
             window.location.href = '/login';
         } else {
             errorMsg.textContent = data.msg || '注册失败';

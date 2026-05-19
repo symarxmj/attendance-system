@@ -10,7 +10,9 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -22,6 +24,7 @@ public class StudentServiceImpl implements StudentService {
         if(student.getStudentName() == null || student.getStudentName().isEmpty()){
             throw new RuntimeException("姓名不能为空！");
         }
+        student.setCreateTime(LocalDateTime.now());
         studentMapper.insertStudent(student);
         return "创建成功";
     }
@@ -41,6 +44,11 @@ public class StudentServiceImpl implements StudentService {
     public String updateStudent(Student student) {
         studentMapper.updateStudent(student);
         return "信息更新成功";
+    }
+
+    @Override
+    public Student findById(String studentId) {
+        return studentMapper.getById(studentId);
     }
 
     @Override

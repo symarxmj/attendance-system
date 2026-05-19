@@ -16,6 +16,9 @@ public interface StudentMapper {
     @Select("select * from student")
     List<Student> findAll();
 
+    @Select("select * from student where student_id = #{studentId}")
+    Student getById(String studentId);
+
     void delete(String studentId);
 
     void updateStudent(Student student);
