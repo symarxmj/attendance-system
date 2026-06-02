@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${session.sessionId != null} ? '编辑课次' : '新增课次'">课次表单</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+    <style>
+        .form-wrap { background:#fff; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.06); padding:32px; max-width:500px; margin:0 auto; }
+        .form-group { margin-bottom:20px; }
+        .form-group label { display:block; margin-bottom:6px; font-size:14px; font-weight:500; color:#333; }
+        .form-group input,.form-group select { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:4px; font-size:14px; }
+        .form-group input:focus,.form-group select:focus { outline:none; border-color:#e67e22; }
+        .btn-group { display:flex; gap:12px; margin-top:24px; }
+        .btn-group .btn { flex:1; padding:10px; text-align:center; text-decoration:none; }
+        .error-msg { color:#e74c3c; font-size:13px; margin-top:4px; display:none; }
+        .toast-notification { position:fixed; top:24px; left:50%; transform:translateX(-50%); background:#27ae60; color:#fff; padding:12px 32px; border-radius:6px; font-size:14px; z-index:9999; }
+        .toast-notification.toast-fade { opacity:0; }
+        .toast-error { background:#e74c3c; }
+    </style>
+</head>
+<body>
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+    <div class="main-content"><div class="container">
+        <div class="page-header">
+            <h2 th:text="${session.sessionId != null} ? '编辑课次' : '新增课次'">课次表单</h2>
+            <a href="/course-session/list-page" style="color:#e67e22;text-decoration:none;">&larr; 返回列表</a>
+        </div>
+        <div class="form-wrap">
+            <form id="mainForm">
+                <div class="form-group">
+                    <label>课程</label>
+                    <select id="courseId"><option value="">请选择课程</option></select>
+                </div>
+                <div class="form-group">
+                    <label>上课日期</label>
+                    <input type="date" id="sessionDate" th:value="${session.sessionDate}" required>
+                </div>
+                <div class="form-group">
+                    <label>第几周</label>
+                    <input type="number" id="weekNumber" th:value="${session.weekNumber}" placeholder="第几周">
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="status">
+                        <option value="1">进行中</option>
+                        <option value="0">已结束</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn" id="submitBtn">保存</button>
+                    <a href="/course-session/list-page" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div></div>
+    <script th:inline="javascript">
+        const isEdit = /*[[${session.sessionId != null}]]*/ false;
+        const entityId = /*[[${session.sessionId}]]*/ null;
+        const origCourseId = /*[[${session.courseId}]]*/ '';
+        const origStatus = /*[[${session.status}]]*/ 1;
+    </script>
+    <script src="/js/course-session-form.js"></script>
+</body>
+</html>

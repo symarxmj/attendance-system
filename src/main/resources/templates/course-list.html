@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程管理</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+</head>
+<body>
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+    <div class="main-content"><div class="container">
+        <div class="page-header"><h2>课程管理</h2><a href="/course/add-page" class="btn">+ 新增课程</a></div>
+        <div class="filter-bar">
+            <input type="text" id="filterId" placeholder="课程编号">
+            <input type="text" id="filterName" placeholder="课程名称">
+            <button class="btn" onclick="loadList()">查询</button>
+            <button class="btn btn-secondary" onclick="resetFilter()">重置</button>
+        </div>
+        <div class="table-wrap"><table>
+            <thead><tr><th>课程编号</th><th>课程名称</th><th>教师ID</th><th>教室ID</th><th>星期</th><th>起止周</th><th>操作</th></tr></thead>
+            <tbody id="dataTable"><tr><td colspan="7" class="loading">加载中...</td></tr></tbody>
+        </table></div>
+        <div class="pagination">
+            <button id="prevBtn" onclick="changePage(-1)">上一页</button>
+            <span id="pageInfo">第 1 页</span>
+            <button id="nextBtn" onclick="changePage(1)">下一页</button>
+        </div>
+    </div></div>
+    <script src="/js/course-list.js"></script>
+</body>
+</html>

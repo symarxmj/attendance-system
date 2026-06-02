@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendancesystem.mapper.CourseSelectionMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into course_selection(student_id, course_id, select_time)
+        values(#{studentId}, #{courseId}, #{selectTime})
+    </insert>
+
+    <delete id="delete">
+        delete from course_selection where id = #{id}
+    </delete>
+
+    <update id="update">
+        update course_selection
+        <set>
+            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="courseId != null and courseId != ''">course_id = #{courseId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultType="com.example.attendancesystem.entity.CourseSelection">
+        select * from course_selection where id = #{id}
+    </select>
+
+    <select id="list" resultType="com.example.attendancesystem.entity.CourseSelection">
+        select * from course_selection
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+</mapper>

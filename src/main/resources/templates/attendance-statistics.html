@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>考勤统计</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+    <style>
+        .stats-card {
+            background: #fff; border-radius: 8px; padding: 24px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08); max-width: 700px; margin: 0 auto;
+        }
+        .select-row { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; }
+        .select-row select { flex:1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-item {
+            background: #f9fafb; border-radius: 8px; padding: 20px; text-align: center;
+        }
+        .stat-item .num { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+        .stat-item .label { font-size: 13px; color: #6b7280; }
+        .num.total { color: #3b82f6; } .num.present { color: #059669; }
+        .num.absent { color: #dc2626; } .num.rate { color: #7c3aed; }
+        .rate-bar-bg { background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden; }
+        .rate-bar-fill { height: 100%; border-radius: 10px; transition: width .5s; background: linear-gradient(90deg, #3b82f6, #7c3aed); }
+        .empty-hint { text-align: center; color: #9ca3af; padding: 60px 0; }
+    </style>
+</head>
+<body>
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>考勤统计</h2>
+                <a href="/attendance/list-page" class="btn btn-secondary">返回考勤列表</a>
+            </div>
+
+            <div class="stats-card">
+                <div class="select-row">
+                    <label style="white-space:nowrap;font-weight:500;">选择学生：</label>
+                    <select id="studentSelect" onchange="loadStatistics()">
+                        <option value="">-- 请选择学生 --</option>
+                    </select>
+                </div>
+
+                <div id="statsContent">
+                    <div class="empty-hint">请选择一名学生查看考勤统计</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/attendance-statistics.js"></script>
+</body>
+</html>

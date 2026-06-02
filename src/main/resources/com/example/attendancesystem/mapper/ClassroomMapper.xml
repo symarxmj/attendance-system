@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendancesystem.mapper.ClassroomMapper">
+
+    <select id="list" resultType="com.example.attendancesystem.entity.Classroom">
+        select * from classroom
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="classroomName != null and classroomName != ''">
+                and classroom_name like concat('%', #{classroomName}, '%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insert" parameterType="com.example.attendancesystem.entity.Classroom" useGeneratedKeys="true" keyProperty="id">
+        insert into classroom(classroom_name, rows, cols, exclude_seats, create_time)
+        values(#{classroomName}, #{rows}, #{cols}, #{excludeSeats}, #{createTime})
+    </insert>
+
+    <delete id="delete">
+        delete from classroom where id = #{id}
+    </delete>
+
+    <update id="update">
+        update classroom
+        <set>
+            <if test="classroomName != null and classroomName != ''">classroom_name = #{classroomName},</if>
+            <if test="rows != null">rows = #{rows},</if>
+            <if test="cols != null">cols = #{cols},</if>
+            <if test="excludeSeats != null">exclude_seats = #{excludeSeats},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultType="com.example.attendancesystem.entity.Classroom">
+        select * from classroom where id = #{id}
+    </select>
+
+</mapper>

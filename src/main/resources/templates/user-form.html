@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.id != null} ? '编辑用户' : '新增用户'">用户表单</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+    <style>
+        .access-denied {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 80px 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+        .access-denied h2 {
+            color: #e74c3c;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .access-denied p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .form-wrap {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 32px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #e67e22;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .btn-group .btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+        }
+        .error-msg {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-hint {
+            color: #95a5a6;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .toast-notification {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: opacity 0.3s;
+        }
+        .toast-notification.toast-fade {
+            opacity: 0;
+        }
+        .toast-error {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+
+    <div class="main-content">
+        <!-- 非 ADMIN 用户 -->
+        <div class="container" th:if="${role != 'ADMIN'}">
+            <div class="access-denied">
+                <h2>您暂无管理员权限，不予访问</h2>
+                <p>如需访问此页面，请联系系统管理员</p>
+            </div>
+        </div>
+
+        <!-- ADMIN 用户 -->
+        <div class="container" th:if="${role == 'ADMIN'}" id="adminContent">
+            <div class="page-header">
+                <h2 th:text="${user.id != null} ? '编辑用户' : '新增用户'">用户表单</h2>
+                <a href="/user/list-page" style="color:#e67e22;text-decoration:none;">&larr; 返回列表</a>
+            </div>
+
+            <div class="form-wrap">
+                <form id="userForm" autocomplete="off">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" id="username"
+                               th:value="${user.username}"
+                               th:readonly="${user.id != null}"
+                               placeholder="请输入用户名" required>
+                        <div class="error-msg" id="usernameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="password" placeholder="请输入密码">
+                        <div class="form-hint" th:if="${user.id != null}">不修改密码请留空</div>
+                        <div class="error-msg" id="passwordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>真实姓名</label>
+                        <input type="text" id="realName" th:value="${user.realName}" placeholder="请输入真实姓名" required>
+                        <div class="error-msg" id="realNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>角色</label>
+                        <select id="role">
+                            <option value="">请选择角色</option>
+                            <option value="ADMIN">管理员</option>
+                            <option value="TEACHER">教师</option>
+                        </select>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn" id="submitBtn">保存</button>
+                        <a href="/user/list-page" class="btn btn-secondary">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const isEdit = /*[[${user.id != null}]]*/ false;
+        const userId = /*[[${user.id}]]*/ null;
+        const userRole = /*[[${user.role}]]*/ '';
+    </script>
+    <script src="/js/user-form.js"></script>
+</body>
+</html>

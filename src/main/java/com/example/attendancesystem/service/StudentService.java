@@ -2,6 +2,7 @@ package com.example.attendancesystem.service;
 
 import com.example.attendancesystem.entity.Student;
 import com.example.attendancesystem.entity.StudentQueryParam;
+import com.example.attendancesystem.util.ImportResult;
 import com.example.attendancesystem.util.PageResult;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface StudentService {
     PageResult<Student> page(StudentQueryParam studentQueryParam);
 
     Student findById(String studentId);
+
+    ImportResult importFromExcel(String filePath);
+
+    byte[] generateTemplate();
 }

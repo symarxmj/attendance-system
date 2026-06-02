@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>批量导入学生</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+    <style>
+        .import-card {
+            background: #fff; border-radius: 8px; padding: 30px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08); max-width: 600px; margin: 0 auto;
+        }
+        .upload-area {
+            border: 2px dashed #d1d5db; border-radius: 8px; padding: 40px;
+            text-align: center; cursor: pointer; transition: border-color .2s;
+        }
+        .upload-area:hover, .upload-area.dragover { border-color: #3b82f6; background: #f0f7ff; }
+        .upload-area p { color: #6b7280; margin: 8px 0; }
+        .upload-area .icon { font-size: 40px; }
+        .file-selected { color: #059669; font-weight: 500; margin-top: 12px; }
+        .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+        .result-box { margin-top: 20px; padding: 16px; border-radius: 8px; }
+        .result-success { background: #ecfdf5; border: 1px solid #a7f3d0; }
+        .result-error { background: #fef2f2; border: 1px solid #fecaca; }
+        .result-box h4 { margin: 0 0 8px 0; }
+        .error-list { font-size: 13px; color: #dc2626; max-height: 200px; overflow-y: auto; margin-top: 8px; }
+        .error-list li { margin: 2px 0; }
+    </style>
+</head>
+<body>
+    <div th:insert="fragments/sidebar :: sidebar"></div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>批量导入学生</h2>
+                <a href="/student/list-page" class="btn btn-secondary">返回列表</a>
+            </div>
+
+            <div class="import-card">
+                <div>
+                    <p style="color:#374151;font-weight:500;margin-bottom:4px;">Excel 文件格式要求：</p>
+                    <ul style="font-size:14px;color:#6b7280;margin:0 0 16px 0;padding-left:20px;">
+                        <li>第一行为标题头（学号、姓名、性别），从第二行开始为数据</li>
+                        <li>性别列填写"男"或"女"，为空则默认为空</li>
+                        <li>学号和姓名不能为空</li>
+                        <li>支持 .xlsx 和 .xls 格式</li>
+                    </ul>
+                    <a href="/student/template" class="btn btn-secondary">下载导入模板</a>
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <p class="icon">📁</p>
+                    <p>点击选择文件或拖拽文件到此处</p>
+                    <p style="font-size:12px;">支持 .xlsx, .xls 格式，文件大小不超过 10MB</p>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;">
+                    <p class="file-selected" id="fileName"></p>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn" id="uploadBtn" disabled onclick="doImport()">开始导入</button>
+                    <span id="importStatus" style="line-height:2;color:#6b7280;"></span>
+                </div>
+
+                <div id="resultContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/student-import.js"></script>
+</body>
+</html>

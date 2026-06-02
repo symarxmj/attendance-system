@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+    <style>
+        .access-denied {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 80px 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+        .access-denied h2 {
+            color: #e74c3c;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .access-denied p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div th:insert="~{fragments/sidebar :: sidebar}"></div>
+
+    <div class="main-content">
+        <!-- 非 ADMIN 用户 -->
+        <div class="container" th:if="${role != 'ADMIN'}">
+            <div class="access-denied">
+                <h2>您暂无管理员权限，不予访问</h2>
+                <p>如需访问此页面，请联系系统管理员</p>
+            </div>
+        </div>
+
+        <!-- ADMIN 用户 -->
+        <div class="container" th:if="${role == 'ADMIN'}" id="adminContent">
+            <div class="page-header">
+                <h2>用户管理</h2>
+                <a href="/user/add-page" class="btn">+ 新增用户</a>
+            </div>
+
+            <div class="filter-bar">
+                <input type="text" id="filterUsername" placeholder="用户名">
+                <input type="text" id="filterRealName" placeholder="姓名">
+                <select id="filterRole">
+                    <option value="">全部角色</option>
+                    <option value="ADMIN">管理员</option>
+                    <option value="TEACHER">教师</option>
+                    <option value="STUDENT">学生</option>
+                </select>
+                <button class="btn" onclick="loadUsers()">查询</button>
+                <button class="btn btn-secondary" onclick="resetFilter()">重置</button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>真实姓名</th>
+                            <th>角色</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable">
+                        <tr><td colspan="6" class="loading">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button id="prevBtn" onclick="changePage(-1)">上一页</button>
+                <span id="pageInfo">第 1 页</span>
+                <button id="nextBtn" onclick="changePage(1)">下一页</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/user-list.js"></script>
+</body>
+</html>

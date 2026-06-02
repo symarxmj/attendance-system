@@ -1,15 +1,22 @@
 package com.example.attendancesystem.mapper;
 
 import com.example.attendancesystem.entity.User;
+import com.example.attendancesystem.entity.UserQueryParam;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
-@Repository
 public interface UserMapper {
     void insertUser(User user);
 
-    void delete(String userId);
+    void delete(Long id);
 
     User findByUsername(String username);
+
+    User findById(Long id);
+
+    void updateUser(User user);
+
+    List<User> list(UserQueryParam param);
 }

@@ -10,8 +10,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const user = {
         username: document.getElementById('username').value.trim(),
         password: document.getElementById('password').value,
-        realName: document.getElementById('realName').value.trim(),
-        role: document.getElementById('role').value
+        realName: document.getElementById('realName').value.trim()
     };
 
     try {

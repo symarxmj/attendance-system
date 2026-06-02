@@ -7,12 +7,43 @@
         insert into user(username, password, real_name, role, create_time)
         values(#{username}, #{password}, #{realName}, #{role}, #{createTime})
     </insert>
+
     <delete id="delete">
-        delete from user
-        where username = #{username}
+        delete from user where id = #{id}
     </delete>
+
     <select id="findByUsername" resultType="com.example.attendancesystem.entity.User">
+        select * from user where username = #{username}
+    </select>
+
+    <select id="findById" resultType="com.example.attendancesystem.entity.User">
+        select * from user where id = #{id}
+    </select>
+
+    <update id="updateUser">
+        update user
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="realName != null and realName != ''">real_name = #{realName},</if>
+            <if test="role != null and role != ''">role = #{role},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="list" resultType="com.example.attendancesystem.entity.User">
         select * from user
-        where username = #{username}
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="realName != null and realName != ''">
+                and real_name like concat('%', #{realName}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                and role = #{role}
+            </if>
+        </where>
+        order by id desc
     </select>
 </mapper>

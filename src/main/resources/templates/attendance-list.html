@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>考勤管理</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/student-list.css">
+</head>
+<body>
+    <div th:insert="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content"><div class="container">
+        <div class="page-header">
+            <h2>考勤管理</h2>
+            <a href="/attendance/statistics-page" class="btn">考勤统计</a>
+        </div>
+        <div class="filter-bar">
+            <input type="text" id="filterStudentId" placeholder="学号">
+            <select id="filterStatus">
+                <option value="">全部状态</option>
+                <option value="PRESENT">已签到</option>
+                <option value="ABSENT">缺勤</option>
+            </select>
+            <input type="date" id="filterBegin" title="起始日期">
+            <input type="date" id="filterEnd" title="截止日期">
+            <button class="btn" onclick="loadList()">查询</button>
+            <button class="btn btn-secondary" onclick="resetFilter()">重置</button>
+        </div>
+        <div class="table-wrap"><table>
+            <thead><tr><th>ID</th><th>节次ID</th><th>学号</th><th>签到时间</th><th>状态</th><th>IP</th><th>操作</th></tr></thead>
+            <tbody id="dataTable"><tr><td colspan="7" class="loading">加载中...</td></tr></tbody>
+        </table></div>
+        <div class="pagination">
+            <button id="prevBtn" onclick="changePage(-1)">上一页</button>
+            <span id="pageInfo">第 1 页</span>
+            <button id="nextBtn" onclick="changePage(1)">下一页</button>
+        </div>
+    </div></div>
+    <script src="/js/attendance-list.js"></script>
+</body>
+</html>

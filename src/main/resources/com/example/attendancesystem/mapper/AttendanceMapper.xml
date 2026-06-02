@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendancesystem.mapper.AttendanceMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into attendance(session_id, student_id, check_in_time, status, ip, create_time)
+        values(#{sessionId}, #{studentId}, #{checkInTime}, #{status}, #{ip}, #{createTime})
+    </insert>
+
+    <select id="findBySessionIdAndStudentId" resultType="com.example.attendancesystem.entity.Attendance">
+        select * from attendance where session_id = #{sessionId} and student_id = #{studentId}
+    </select>
+
+    <select id="findByStudentIdAndSessionIds" resultType="com.example.attendancesystem.entity.Attendance">
+        select * from attendance
+        where student_id = #{studentId}
+        and session_id in
+        <foreach collection="sessionIds" item="sid" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+    </select>
+
+    <delete id="delete">
+        delete from attendance where id = #{id}
+    </delete>
+
+    <update id="update">
+        update attendance
+        <set>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="seatRow != null">seat_row = #{seatRow},</if>
+            <if test="seatCol != null">seat_col = #{seatCol},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultType="com.example.attendancesystem.entity.Attendance">
+        select * from attendance where id = #{id}
+    </select>
+
+    <select id="list" resultType="com.example.attendancesystem.entity.Attendance">
+        select * from attendance
+        <where>
+            <if test="sessionId != null">
+                and session_id = #{sessionId}
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="begin != null and end != null">
+                and check_in_time between #{begin} and #{end}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="countByStudentId" resultType="long">
+        select count(*) from attendance where student_id = #{studentId}
+    </select>
+
+    <select id="countByStudentIdAndStatus" resultType="long">
+        select count(*) from attendance where student_id = #{studentId} and status = #{status}
+    </select>
+
+</mapper>

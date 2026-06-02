@@ -24,4 +24,6 @@ public interface StudentMapper {
     void updateStudent(Student student);
 
     List<Student> list(StudentQueryParam studentQueryParam);
+
+    int insertBatch(List<Student> list);
 }
