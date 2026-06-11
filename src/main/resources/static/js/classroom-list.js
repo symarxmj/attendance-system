@@ -36,7 +36,7 @@ function loadList() {
                     '<td>' + escHtml(r.classroomName) + '</td>' +
                     '<td>' + r.rows + '</td>' +
                     '<td>' + r.cols + '</td>' +
-                    '<td>' + escHtml(r.excludeSeats || '-') + '</td>' +
+                    '<td>' + escHtml(parseSeats(r.excludeSeats)) + '</td>' +
                     '<td>' + (r.createTime ? r.createTime.substring(0, 10) : '') + '</td>' +
                     '<td><div class="action-cell">' +
                     '<a class="btn-action btn-edit" href="/classroom/edit-page/' + r.id + '">编辑</a>' +
@@ -80,6 +80,19 @@ function escHtml(str) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
+}
+
+function parseSeats(str) {
+    if (!str) return '-';
+    var parts = str.split(',');
+    var result = [];
+    parts.forEach(function(p) {
+        var rc = p.trim().split('-');
+        if (rc.length === 2) {
+            result.push('第' + rc[0] + '行第' + rc[1] + '列');
+        }
+    });
+    return result.length > 0 ? result.join('，') : str;
 }
 
 function showToast(msg, isError) {

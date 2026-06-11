@@ -16,4 +16,5 @@ public class User {
     private String realName;
     private String role;
     private LocalDateTime createTime;
+    private String gender; // 仅用于注册传参，不持久化到 user 表
 }

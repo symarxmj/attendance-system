@@ -10,7 +10,7 @@
         <foreach collection="courseIds" item="courseId" open="(" separator="," close=")">
             #{courseId}
         </foreach>
-        and session_date = #{sessionDate}
+        and DATE(session_date) = #{sessionDate}
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="sessionId">
@@ -38,16 +38,18 @@
     </select>
 
     <select id="list" resultType="com.example.attendancesystem.entity.CourseSession">
-        select * from course_session
+        select cs.*, c.course_name
+        from course_session cs
+        left join course c on cs.course_id = c.course_id
         <where>
             <if test="courseId != null and courseId != ''">
-                and course_id = #{courseId}
+                and cs.course_id = #{courseId}
             </if>
             <if test="sessionDate != null and sessionDate != ''">
-                and session_date = #{sessionDate}
+                and DATE(cs.session_date) = #{sessionDate}
             </if>
         </where>
-        order by session_date desc, session_id desc
+        order by cs.session_date desc, cs.session_id desc
     </select>
 
 </mapper>

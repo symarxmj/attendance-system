@@ -52,4 +52,9 @@ public class CourseSelectionServiceImpl implements CourseSelectionService {
         Page<CourseSelection> page = (Page<CourseSelection>) list;
         return new PageResult<>(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public void deleteByStudentId(String studentId) {
+        courseSelectionMapper.deleteByStudentId(studentId);
+    }
 }

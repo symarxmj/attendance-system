@@ -1,73 +1,56 @@
-document.getElementById('studentForm').addEventListener('submit', async function(e) {
+document.getElementById('studentForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const data = {
-        studentId: document.getElementById('studentId').value.trim(),
-        studentName: document.getElementById('studentName').value.trim(),
-        gender: document.getElementById('gender').value
+    var studentId = document.getElementById('studentIdVal').value.trim();
+    var studentName = document.getElementById('studentName').value.trim();
+    var gender = document.getElementById('gender').value;
+
+    if (!studentId) { showToast('学号不能为空', true); return; }
+    if (!studentName) { showToast('姓名不能为空', true); return; }
+
+    var data = {
+        studentId: studentId,
+        studentName: studentName,
+        gender: gender
     };
 
-    if (!data.studentId) {
-        showError('studentIdError', '学号不能为空');
-        return;
-    }
-    if (!data.studentName) {
-        showError('studentNameError', '姓名不能为空');
-        return;
-    }
-
-    const submitBtn = document.getElementById('submitBtn');
+    var submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.textContent = '保存中...';
 
-    try {
-        let res;
-        if (isEdit) {
-            res = await fetch('/student/' + studentId, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-        } else {
-            res = await fetch('/student', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-        }
-        const result = await res.json();
+    var url = isEdit ? '/student/' + origStudentId : '/student';
+    var method = isEdit ? 'PUT' : 'POST';
+
+    fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(result) {
         if (result.code === 1) {
             showToast('保存成功');
-            setTimeout(() => { window.location.href = '/student/list-page'; }, 800);
+            setTimeout(function() { window.location.href = '/student/list-page'; }, 800);
         } else {
             showToast(result.msg || '操作失败', true);
         }
-    } catch (err) {
-        showToast('网络错误，请重试', true);
-    } finally {
+    })
+    .catch(function() { showToast('网络错误，请重试', true); })
+    .finally(function() {
         submitBtn.disabled = false;
         submitBtn.textContent = '保存';
-    }
+    });
 });
 
-function showError(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    el.style.display = 'block';
-    setTimeout(() => { el.style.display = 'none'; }, 3000);
-}
-
 function showToast(msg, isError) {
-    const existing = document.querySelector('.toast-notification');
+    var existing = document.querySelector('.toast-notification');
     if (existing) existing.remove();
-
-    const toast = document.createElement('div');
+    var toast = document.createElement('div');
     toast.className = 'toast-notification' + (isError ? ' toast-error' : '');
     toast.textContent = msg;
     document.body.appendChild(toast);
-
-    setTimeout(() => {
+    setTimeout(function() {
         toast.classList.add('toast-fade');
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(function() { toast.remove(); }, 300);
     }, 2000);
 }

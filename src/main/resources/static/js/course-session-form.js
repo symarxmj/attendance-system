@@ -15,9 +15,10 @@ async function init() {
 
 document.getElementById('mainForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+    var dateVal = document.getElementById('sessionDate').value;
     var data = {
         courseId: document.getElementById('courseId').value,
-        sessionDate: document.getElementById('sessionDate').value,
+        sessionDate: dateVal ? dateVal + ':00' : '',
         weekNumber: parseInt(document.getElementById('weekNumber').value) || null,
         status: parseInt(document.getElementById('status').value) || 1
     };

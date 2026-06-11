@@ -14,4 +14,6 @@ public class CourseSelection {
     private String studentId;
     private String courseId;
     private LocalDateTime selectTime;
+    private String studentName;  // 仅用于列表展示
+    private String courseName;   // 仅用于列表展示
 }

@@ -1,6 +1,10 @@
 package com.example.attendancesystem.service.impl;
 
+import com.example.attendancesystem.entity.User;
+import com.example.attendancesystem.mapper.AttendanceMapper;
+import com.example.attendancesystem.mapper.CourseSelectionMapper;
 import com.example.attendancesystem.mapper.StudentMapper;
+import com.example.attendancesystem.mapper.UserMapper;
 import com.example.attendancesystem.entity.Student;
 import com.example.attendancesystem.entity.StudentQueryParam;
 import com.example.attendancesystem.service.StudentService;
@@ -11,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -23,6 +28,18 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+
+    @Autowired
+    private CourseSelectionMapper courseSelectionMapper;
 
     @Override
     public String insertStudent(Student student) {
@@ -41,6 +58,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String deleteStudent(String studentId) {
+        // 级联删除关联数据
+        attendanceMapper.deleteByStudentId(studentId);
+        courseSelectionMapper.deleteByStudentId(studentId);
+        userMapper.deleteByUsername(studentId);
         studentMapper.delete(studentId);
         return "删除成功";
     }
@@ -67,8 +88,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public ImportResult importFromExcel(String filePath) {
         ImportResult result = new ImportResult();
-        List<Student> batch = new ArrayList<>();
+        List<Student> studentBatch = new ArrayList<>();
+        List<User> userBatch = new ArrayList<>();
         int batchSize = 200;
+        String defaultPassword = passwordEncoder.encode("swufe");
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = WorkbookFactory.create(fis)) {
@@ -104,20 +127,40 @@ public class StudentServiceImpl implements StudentService {
                     student.setStudentName(studentName);
                     student.setGender(gender);
                     student.setCreateTime(LocalDateTime.now());
-                    batch.add(student);
+                    studentBatch.add(student);
+
+                    // 同步创建 user 记录（默认密码 swufe）
+                    User existingUser = userMapper.findByUsername(studentId);
+                    if (existingUser == null) {
+                        User user = new User();
+                        user.setUsername(studentId);
+                        user.setPassword(defaultPassword);
+                        user.setRealName(studentName);
+                        user.setRole("STUDENT");
+                        user.setCreateTime(LocalDateTime.now());
+                        userBatch.add(user);
+                    }
+
                     result.incrementSuccess();
 
-                    if (batch.size() >= batchSize) {
-                        studentMapper.insertBatch(batch);
-                        batch.clear();
+                    if (studentBatch.size() >= batchSize) {
+                        studentMapper.insertBatch(studentBatch);
+                        studentBatch.clear();
+                        if (!userBatch.isEmpty()) {
+                            userMapper.insertBatch(userBatch);
+                            userBatch.clear();
+                        }
                     }
                 } catch (Exception e) {
                     result.incrementFail("第" + (i + 1) + "行：解析失败 - " + e.getMessage());
                 }
             }
 
-            if (!batch.isEmpty()) {
-                studentMapper.insertBatch(batch);
+            if (!studentBatch.isEmpty()) {
+                studentMapper.insertBatch(studentBatch);
+            }
+            if (!userBatch.isEmpty()) {
+                userMapper.insertBatch(userBatch);
             }
         } catch (Exception e) {
             throw new RuntimeException("读取Excel文件失败：" + e.getMessage(), e);

@@ -14,4 +14,6 @@ public interface CourseSelectionMapper {
     void update(CourseSelection cs);
     CourseSelection findById(Long id);
     List<CourseSelection> list(CourseSelectionQueryParam param);
+
+    void deleteByStudentId(String studentId);
 }

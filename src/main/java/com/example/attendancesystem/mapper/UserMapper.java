@@ -19,4 +19,8 @@ public interface UserMapper {
     void updateUser(User user);
 
     List<User> list(UserQueryParam param);
+
+    int insertBatch(List<User> list);
+
+    void deleteByUsername(String username);
 }

@@ -18,7 +18,7 @@
     </select>
 
     <insert id="insert" parameterType="com.example.attendancesystem.entity.Classroom" useGeneratedKeys="true" keyProperty="id">
-        insert into classroom(classroom_name, rows, cols, exclude_seats, create_time)
+        insert into classroom(classroom_name, `rows`, cols, exclude_seats, create_time)
         values(#{classroomName}, #{rows}, #{cols}, #{excludeSeats}, #{createTime})
     </insert>
 

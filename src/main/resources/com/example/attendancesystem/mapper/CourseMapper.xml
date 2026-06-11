@@ -27,22 +27,32 @@
     </update>
 
     <select id="list" resultType="com.example.attendancesystem.entity.Course">
-        select * from course
+        select c.*, u.real_name as teacher_name
+        from course c
+        left join user u on c.teacher_id = u.id
         <where>
             <if test="courseId != null and courseId != ''">
-                and course_id like concat('%', #{courseId}, '%')
+                and c.course_id like concat('%', #{courseId}, '%')
             </if>
             <if test="courseName != null and courseName != ''">
-                and course_name like concat('%', #{courseName}, '%')
+                and c.course_name like concat('%', #{courseName}, '%')
             </if>
             <if test="teacherId != null">
-                and teacher_id = #{teacherId}
+                and c.teacher_id = #{teacherId}
             </if>
             <if test="classroomId != null">
-                and classroom_id = #{classroomId}
+                and c.classroom_id = #{classroomId}
             </if>
         </where>
-        order by create_time desc
+        order by c.create_time desc
+    </select>
+
+    <select id="findById" resultType="com.example.attendancesystem.entity.Course">
+        select * from course where course_id = #{courseId}
+    </select>
+
+    <select id="findAll" resultType="com.example.attendancesystem.entity.Course">
+        select * from course order by create_time desc
     </select>
 
 </mapper>

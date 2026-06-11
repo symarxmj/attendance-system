@@ -12,8 +12,11 @@ public interface AttendanceService {
     String checkIn(Long sessionId, String studentId, String ip);
     Map<Long, Attendance> getTodayAttendanceMap(String studentId, List<Long> sessionIds);
     void delete(Long id);
+    void updateStatus(Long id, String status);
     Attendance findById(Long id);
     PageResult<Attendance> page(AttendanceQueryParam param);
 
     StatisticsDTO getStudentStatistics(String studentId);
+
+    void deleteByStudentId(String studentId);
 }

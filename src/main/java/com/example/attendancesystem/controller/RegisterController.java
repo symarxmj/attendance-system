@@ -48,6 +48,7 @@ public class RegisterController {
                 ? user.getRealName()
                 : user.getUsername()
         );
+        student.setGender(user.getGender());
         student.setCreateTime(LocalDateTime.now());
         studentService.insertStudent(student);
 

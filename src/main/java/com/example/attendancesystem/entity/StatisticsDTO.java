@@ -7,5 +7,7 @@ public class StatisticsDTO {
     private long totalCount;
     private long presentCount;
     private long absentCount;
+    private long normalCount;
+    private long lateCount;
     private double attendanceRate;
 }

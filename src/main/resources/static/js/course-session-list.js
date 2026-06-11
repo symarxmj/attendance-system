@@ -19,8 +19,8 @@ function loadList() {
             if (!rows || rows.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty">暂无数据</td></tr>'; return; }
             var html = '';
             rows.forEach(function(r) {
-                html += '<tr><td>' + r.sessionId + '</td><td>' + escHtml(r.courseId) + '</td>' +
-                    '<td>' + escHtml(r.sessionDate) + '</td><td>' + (r.weekNumber || '') + '</td>' +
+                html += '<tr><td>' + r.sessionId + '</td><td>' + escHtml(r.courseName || r.courseId) + '</td>' +
+                    '<td>' + fmtDate(r.sessionDate) + '</td><td>' + (r.weekNumber || '') + '</td>' +
                     '<td>' + (r.status === 1 ? '进行中' : '已结束') + '</td>' +
                     '<td><div class="action-cell">' +
                     '<a class="btn-action btn-edit" href="/course-session/edit-page/' + r.sessionId + '">编辑</a>' +
@@ -40,6 +40,7 @@ function handleDelete(id) {
 }
 function changePage(d) { var np = currentPage + d; if (np < 1 || np > totalPages) return; currentPage = np; loadList(); }
 function resetFilter() { document.getElementById('filterCourseId').value = ''; document.getElementById('filterDate').value = ''; currentPage = 1; loadList(); }
+function fmtDate(s) { if (!s) return ''; return s.substring(0, 16).replace('T', ' '); }
 function escHtml(s) { if (!s) return ''; var d = document.createElement('div'); d.appendChild(document.createTextNode(s)); return d.innerHTML; }
 function showToast(m, e) { var x = document.querySelector('.toast-notification'); if (x) x.remove(); var t = document.createElement('div'); t.className = 'toast-notification' + (e ? ' toast-error' : ''); t.textContent = m; document.body.appendChild(t); setTimeout(function() { t.classList.add('toast-fade'); setTimeout(function() { t.remove(); }, 300); }, 2000); }
 loadList();

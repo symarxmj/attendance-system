@@ -1,16 +1,20 @@
 package com.example.attendancesystem.controller;
 
+import com.example.attendancesystem.entity.Student;
 import com.example.attendancesystem.entity.StudentQueryParam;
+import com.example.attendancesystem.entity.User;
 import com.example.attendancesystem.service.StudentService;
+import com.example.attendancesystem.service.UserService;
 import com.example.attendancesystem.util.ImportResult;
 import com.example.attendancesystem.util.PageResult;
 import com.example.attendancesystem.util.Result;
-import com.example.attendancesystem.entity.Student;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,21 +34,31 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Value("${file.upload.path}")
     private String uploadPath;
 
-    // 新增学生
+    // 新增学生 —— 同时创建登录账号，密码默认为 swufe
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PostMapping
+    @Transactional
     public Result insertStudent(@RequestBody Student student){
-        log.info("新增学生信息：, {}",  student);
+        log.info("新增学生信息：{}", student);
         String message = studentService.insertStudent(student);
+        // 同步创建 user 记录，保证学生可以登录
+        createUserIfNotExists(student.getStudentId(), student.getStudentName());
         return Result.success(message);
     }
 
-    // 根据学号删除学生
+    // 根据学号删除学生 —— 级联删除 user / attendance / course_selection
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @DeleteMapping("/{studentId}")
+    @Transactional
     public Result deleteStudent(@PathVariable String studentId){
         log.info("删除学号为：{}的学生信息", studentId);
         String message = studentService.deleteStudent(studentId);
@@ -51,7 +66,7 @@ public class StudentController {
     }
 
     // 查询所有学生
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @GetMapping
     public Result findAll(){
         List<Student> studentList = studentService.findAll();
@@ -59,7 +74,7 @@ public class StudentController {
     }
 
     // 根据学号查询学生信息
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @GetMapping("/{studentId}")
     public Result findById(@PathVariable String studentId){
         log.info("查询学号为：{}的学生信息", studentId);
@@ -67,18 +82,27 @@ public class StudentController {
         return Result.success(student);
     }
 
-    // 根据学号修改学生信息
+    // 根据学号修改学生信息 —— 同时同步 user.realName
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PutMapping("/{studentId}")
+    @Transactional
     public Result updateStudent(@PathVariable String studentId, @RequestBody Student student){
         log.info("修改学号为：{}的学生信息", studentId);
         student.setStudentId(studentId);
         String message = studentService.updateStudent(student);
+        // 同步更新 user 表的 real_name
+        if (student.getStudentName() != null && !student.getStudentName().isEmpty()) {
+            User user = userService.findByUsername(studentId);
+            if (user != null) {
+                user.setRealName(student.getStudentName());
+                userService.updateUser(user);
+            }
+        }
         return Result.success(message);
     }
 
     // 分页查询学生信息（支持筛选）
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @GetMapping("/list")
     public Result page(StudentQueryParam  studentQueryParam){
         log.info("根据筛选信息分页查询学生信息，筛选信息为：{}", studentQueryParam);
@@ -86,7 +110,7 @@ public class StudentController {
         return Result.success(pageResult);
     }
 
-    // 批量导入学生
+    // 批量导入学生 —— 同时创建登录账号
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     @PostMapping("/import")
     public Result importStudents(@RequestParam("file") MultipartFile file) {
@@ -128,5 +152,18 @@ public class StudentController {
         } catch (IOException e) {
             log.error("模板下载失败", e);
         }
+    }
+
+    // 为新增的学生创建登录账号，默认密码 swufe
+    private void createUserIfNotExists(String studentId, String studentName) {
+        User existing = userService.findByUsername(studentId);
+        if (existing != null) return; // 已有账号则跳过
+        User user = new User();
+        user.setUsername(studentId);
+        user.setPassword(passwordEncoder.encode("swufe"));
+        user.setRealName(studentName != null ? studentName : studentId);
+        user.setRole("STUDENT");
+        user.setCreateTime(LocalDateTime.now());
+        userService.insertUser(user);
     }
 }

@@ -4,13 +4,23 @@
     <div class="sidebar" th:fragment="sidebar">
         <div class="sidebar-brand">考勤系统</div>
         <nav class="sidebar-nav">
-            <a href="/user/list-page" th:class="${currentPage == 'user'} ? 'nav-item active' : 'nav-item'">用户管理</a>
-            <a href="/student/list-page" th:class="${currentPage == 'student'} ? 'nav-item active' : 'nav-item'">学生管理</a>
-            <a href="/classroom/list-page" th:class="${currentPage == 'classroom'} ? 'nav-item active' : 'nav-item'">教室管理</a>
-            <a href="/course/list-page" th:class="${currentPage == 'course'} ? 'nav-item active' : 'nav-item'">课程管理</a>
-            <a href="/course-session/list-page" th:class="${currentPage == 'courseSession'} ? 'nav-item active' : 'nav-item'">课次管理</a>
-            <a href="/course-selection/list-page" th:class="${currentPage == 'courseSelection'} ? 'nav-item active' : 'nav-item'">选课管理</a>
-            <a href="/attendance/list-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤管理</a>
+            <a href="/welcome" th:class="${currentPage == 'welcome'} ? 'nav-item active' : 'nav-item'">首页</a>
+
+            <!-- ADMIN / TEACHER only -->
+            <th:block th:if="${role == 'ADMIN' || role == 'TEACHER'}">
+                <a href="/user/list-page" th:class="${currentPage == 'user'} ? 'nav-item active' : 'nav-item'">用户管理</a>
+                <a href="/student/list-page" th:class="${currentPage == 'student'} ? 'nav-item active' : 'nav-item'">学生管理</a>
+                <a href="/classroom/list-page" th:class="${currentPage == 'classroom'} ? 'nav-item active' : 'nav-item'">教室管理</a>
+                <a href="/course/list-page" th:class="${currentPage == 'course'} ? 'nav-item active' : 'nav-item'">课程管理</a>
+                <a href="/course-session/list-page" th:class="${currentPage == 'courseSession'} ? 'nav-item active' : 'nav-item'">课次管理</a>
+                <a href="/course-selection/list-page" th:class="${currentPage == 'courseSelection'} ? 'nav-item active' : 'nav-item'">选课管理</a>
+                <a href="/attendance/list-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤管理</a>
+            </th:block>
+
+            <!-- STUDENT only -->
+            <th:block th:if="${role == 'STUDENT'}">
+                <a href="/attendance/statistics-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤统计</a>
+            </th:block>
         </nav>
         <div class="sidebar-footer">
             <span class="sidebar-user" th:text="${username}"></span>

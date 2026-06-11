@@ -52,4 +52,14 @@ public class UserServiceImpl implements UserService {
         Page<User> page = (Page<User>) userList;
         return new PageResult<>(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public void deleteByUsername(String username) {
+        userMapper.deleteByUsername(username);
+    }
+
+    @Override
+    public int insertBatch(List<User> list) {
+        return userMapper.insertBatch(list);
+    }
 }

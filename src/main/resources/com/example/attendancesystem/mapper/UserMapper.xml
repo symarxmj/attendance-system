@@ -46,4 +46,15 @@
         </where>
         order by id desc
     </select>
+
+    <insert id="insertBatch">
+        insert into user(username, password, real_name, role, create_time) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.username}, #{item.password}, #{item.realName}, #{item.role}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUsername">
+        delete from user where username = #{username}
+    </delete>
 </mapper>

@@ -24,7 +24,7 @@ function loadList() {
             var html = '';
             rows.forEach(function(r) {
                 html += '<tr><td>' + escHtml(r.courseId) + '</td><td>' + escHtml(r.courseName) + '</td>' +
-                    '<td>' + (r.teacherId || '') + '</td><td>' + (r.classroomId || '') + '</td>' +
+                    '<td>' + escHtml(r.teacherName || '') + '</td><td>' + (r.classroomId || '') + '</td>' +
                     '<td>' + (wdMap[r.weekday] || '') + '</td>' +
                     '<td>' + (r.startWeek||'') + '-' + (r.endWeek||'') + '</td>' +
                     '<td><div class="action-cell">' +

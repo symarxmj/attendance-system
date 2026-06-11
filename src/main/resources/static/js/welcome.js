@@ -18,15 +18,16 @@ async function loadTodaySessions() {
         sessions.forEach(function(s) {
             let statusHtml, actionHtml;
             if (s.checkedIn) {
-                statusHtml = '<span class="tag-checked">已签到</span>';
-                actionHtml = '<span style="color:#95a5a6;font-size:13px;">' + escHtml(s.checkInTime || '') + '</span>';
+                var label = statusLabel(s.status);
+                statusHtml = '<span class="tag-checked">' + label + '</span>';
+                actionHtml = '<span style="color:#95a5a6;font-size:13px;">' + escHtml(s.checkInTime ? s.checkInTime.substring(0,16).replace('T',' ') : '') + '</span>';
             } else {
                 statusHtml = '<span class="tag-waiting">未签到</span>';
                 actionHtml = '<button class="btn-checkin" onclick="doCheckIn(' + s.sessionId + ', this)">签到</button>';
             }
             html += '<tr>' +
                 '<td>' + escHtml(s.courseName) + '</td>' +
-                '<td>' + escHtml(s.sessionDate) + '</td>' +
+                '<td>' + (s.sessionDate ? escHtml(s.sessionDate.substring(0, 16).replace('T', ' ')) : '') + '</td>' +
                 '<td>' + statusHtml + '</td>' +
                 '<td>' + actionHtml + '</td>' +
                 '</tr>';
@@ -60,6 +61,11 @@ async function doCheckIn(sessionId, btn) {
         btn.disabled = false;
         btn.textContent = '签到';
     }
+}
+
+function statusLabel(s) {
+    var map = {NORMAL:'正常',LATE:'迟到',EARLY:'早退',ABSENT:'缺勤'};
+    return map[s] || s || '已签到';
 }
 
 function escHtml(str) {

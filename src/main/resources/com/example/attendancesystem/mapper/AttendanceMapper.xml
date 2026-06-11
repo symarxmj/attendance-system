@@ -67,4 +67,8 @@
         select count(*) from attendance where student_id = #{studentId} and status = #{status}
     </select>
 
+    <delete id="deleteByStudentId">
+        delete from attendance where student_id = #{studentId}
+    </delete>
+
 </mapper>

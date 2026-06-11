@@ -13,4 +13,6 @@ public interface CourseSelectionService {
     void update(CourseSelection cs);
     CourseSelection findById(Long id);
     PageResult<CourseSelection> page(CourseSelectionQueryParam param);
+
+    void deleteByStudentId(String studentId);
 }

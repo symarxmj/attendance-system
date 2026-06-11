@@ -10,17 +10,18 @@ function loadList() {
         .then(function(r) { return r.json(); })
         .then(function(d) {
             var tbody = document.getElementById('dataTable');
-            if (d.code !== 1) { tbody.innerHTML = '<tr><td colspan="5" class="empty">加载失败</td></tr>'; return; }
+            if (d.code !== 1) { tbody.innerHTML = '<tr><td colspan="6" class="empty">加载失败</td></tr>'; return; }
             var rows = d.data.rows;
             totalPages = Math.ceil(d.data.total / pageSize) || 1;
             document.getElementById('pageInfo').textContent = '第 ' + currentPage + ' / ' + totalPages + ' 页';
             document.getElementById('prevBtn').disabled = currentPage <= 1;
             document.getElementById('nextBtn').disabled = currentPage >= totalPages;
-            if (!rows || rows.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无数据</td></tr>'; return; }
+            if (!rows || rows.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty">暂无数据</td></tr>'; return; }
             var html = '';
             rows.forEach(function(r) {
                 html += '<tr><td>' + r.id + '</td><td>' + escHtml(r.studentId) + '</td>' +
-                    '<td>' + escHtml(r.courseId) + '</td>' +
+                    '<td>' + escHtml(r.studentName || '') + '</td>' +
+                    '<td>' + escHtml(r.courseName || r.courseId) + '</td>' +
                     '<td>' + (r.selectTime ? r.selectTime.substring(0, 16) : '') + '</td>' +
                     '<td><div class="action-cell">' +
                     '<a class="btn-action btn-edit" href="/course-selection/edit-page/' + r.id + '">编辑</a>' +
@@ -29,7 +30,7 @@ function loadList() {
             });
             tbody.innerHTML = html;
         })
-        .catch(function() { document.getElementById('dataTable').innerHTML = '<tr><td colspan="5" class="empty">网络错误</td></tr>'; });
+        .catch(function() { document.getElementById('dataTable').innerHTML = '<tr><td colspan="6" class="empty">网络错误</td></tr>'; });
 }
 function handleDelete(id) {
     if (!confirm('确定删除吗？')) return;

@@ -18,4 +18,5 @@ public class Course {
     private Integer startWeek;
     private Integer endWeek;
     private LocalDateTime createTime;
+    private String teacherName;  // 仅用于列表展示，非持久化字段
 }

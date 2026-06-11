@@ -27,16 +27,27 @@
     </select>
 
     <select id="list" resultType="com.example.attendancesystem.entity.CourseSelection">
-        select * from course_selection
+        select cs.*, s.student_name, c.course_name
+        from course_selection cs
+        left join student s on cs.student_id = s.student_id
+        left join course c on cs.course_id = c.course_id
         <where>
             <if test="studentId != null and studentId != ''">
-                and student_id = #{studentId}
+                and cs.student_id = #{studentId}
             </if>
             <if test="courseId != null and courseId != ''">
-                and course_id = #{courseId}
+                and cs.course_id = #{courseId}
             </if>
         </where>
-        order by id desc
+        order by cs.id desc
     </select>
+
+    <select id="findByStudentId" resultType="com.example.attendancesystem.entity.CourseSelection">
+        select * from course_selection where student_id = #{studentId}
+    </select>
+
+    <delete id="deleteByStudentId">
+        delete from course_selection where student_id = #{studentId}
+    </delete>
 
 </mapper>

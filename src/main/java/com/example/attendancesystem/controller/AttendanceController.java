@@ -51,6 +51,7 @@ public class AttendanceController {
             Attendance att = attendanceMap.get(session.getSessionId());
             item.put("checkedIn", att != null);
             item.put("checkInTime", att != null ? att.getCheckInTime() : null);
+            item.put("status", att != null ? att.getStatus() : null);
             result.add(item);
         }
         return Result.success(result);
@@ -74,6 +75,18 @@ public class AttendanceController {
         log.info("删除考勤记录：{}", id);
         attendanceService.delete(id);
         return Result.success("删除成功");
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PutMapping("/{id}")
+    public Result updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        if (status == null || status.isEmpty()) {
+            return Result.error("状态不能为空");
+        }
+        log.info("修改考勤记录 {} 状态为：{}", id, status);
+        attendanceService.updateStatus(id, status);
+        return Result.success("更新成功");
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")

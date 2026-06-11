@@ -32,11 +32,12 @@
         <div class="container">
             <div class="page-header">
                 <h2>考勤统计</h2>
-                <a href="/attendance/list-page" class="btn btn-secondary">返回考勤列表</a>
+                <a th:if="${role == 'ADMIN' || role == 'TEACHER'}" href="/attendance/list-page" class="btn btn-secondary">返回考勤列表</a>
             </div>
 
             <div class="stats-card">
-                <div class="select-row">
+                <!-- ADMIN/TEACHER: 下拉选择学生 -->
+                <div class="select-row" th:if="${role == 'ADMIN' || role == 'TEACHER'}" id="selectRow">
                     <label style="white-space:nowrap;font-weight:500;">选择学生：</label>
                     <select id="studentSelect" onchange="loadStatistics()">
                         <option value="">-- 请选择学生 --</option>
@@ -44,12 +45,16 @@
                 </div>
 
                 <div id="statsContent">
-                    <div class="empty-hint">请选择一名学生查看考勤统计</div>
+                    <div class="empty-hint">加载中...</div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script th:inline="javascript">
+        var myRole = /*[[${role}]]*/ '';
+        var myStudentId = /*[[${username}]]*/ '';
+    </script>
     <script src="/js/attendance-statistics.js"></script>
 </body>
 </html>

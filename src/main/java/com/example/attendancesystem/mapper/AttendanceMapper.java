@@ -22,4 +22,6 @@ public interface AttendanceMapper {
     long countByStudentId(@Param("studentId") String studentId);
 
     long countByStudentIdAndStatus(@Param("studentId") String studentId, @Param("status") String status);
+
+    void deleteByStudentId(@Param("studentId") String studentId);
 }
