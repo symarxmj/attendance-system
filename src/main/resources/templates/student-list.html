@@ -14,8 +14,8 @@
             <div class="page-header">
                 <h2>学生列表</h2>
                 <div style="display:flex;gap:8px;">
-                    <a href="/student/add-page" class="btn">+ 新增学生</a>
-                    <a href="/student/import-page" class="btn btn-secondary">批量导入</a>
+                    <a href="/student/add-page" class="btn" id="btnAddStudent">+ 新增学生</a>
+                    <a href="/student/import-page" class="btn btn-secondary" id="btnImport">批量导入</a>
                 </div>
             </div>
 
@@ -58,6 +58,7 @@
         </div>
     </div>
 
+    <script th:inline="javascript">var myRole = /*[[${role}]]*/ '';</script>
     <script src="/js/student-list.js"></script>
 </body>
 </html>

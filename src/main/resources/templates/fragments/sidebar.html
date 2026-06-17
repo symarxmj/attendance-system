@@ -1,31 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div class="sidebar" th:fragment="sidebar">
-        <div class="sidebar-brand">考勤系统</div>
-        <nav class="sidebar-nav">
-            <a href="/welcome" th:class="${currentPage == 'welcome'} ? 'nav-item active' : 'nav-item'">首页</a>
+    <th:block th:fragment="sidebar">
+        <div class="sidebar">
+            <div class="sidebar-brand">考勤系统</div>
+            <nav class="sidebar-nav">
+                <a href="/welcome" th:class="${currentPage == 'welcome'} ? 'nav-item active' : 'nav-item'">首页</a>
 
-            <!-- ADMIN / TEACHER only -->
-            <th:block th:if="${role == 'ADMIN' || role == 'TEACHER'}">
-                <a href="/user/list-page" th:class="${currentPage == 'user'} ? 'nav-item active' : 'nav-item'">用户管理</a>
-                <a href="/student/list-page" th:class="${currentPage == 'student'} ? 'nav-item active' : 'nav-item'">学生管理</a>
-                <a href="/classroom/list-page" th:class="${currentPage == 'classroom'} ? 'nav-item active' : 'nav-item'">教室管理</a>
-                <a href="/course/list-page" th:class="${currentPage == 'course'} ? 'nav-item active' : 'nav-item'">课程管理</a>
-                <a href="/course-session/list-page" th:class="${currentPage == 'courseSession'} ? 'nav-item active' : 'nav-item'">课次管理</a>
-                <a href="/course-selection/list-page" th:class="${currentPage == 'courseSelection'} ? 'nav-item active' : 'nav-item'">选课管理</a>
-                <a href="/attendance/list-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤管理</a>
-            </th:block>
+                <!-- ADMIN / TEACHER only -->
+                <th:block th:if="${role == 'ADMIN' || role == 'TEACHER'}">
+                    <a href="/user/list-page" th:class="${currentPage == 'user'} ? 'nav-item active' : 'nav-item'">用户管理</a>
+                    <a href="/student/list-page" th:class="${currentPage == 'student'} ? 'nav-item active' : 'nav-item'">学生管理</a>
+                    <a href="/classroom/list-page" th:class="${currentPage == 'classroom'} ? 'nav-item active' : 'nav-item'">教室管理</a>
+                    <a href="/course/list-page" th:class="${currentPage == 'course'} ? 'nav-item active' : 'nav-item'">课程管理</a>
+                    <a href="/course-session/list-page" th:class="${currentPage == 'courseSession'} ? 'nav-item active' : 'nav-item'">课次管理</a>
+                    <a href="/course-selection/list-page" th:class="${currentPage == 'courseSelection'} ? 'nav-item active' : 'nav-item'">选课管理</a>
+                    <a href="/attendance/list-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤管理</a>
+                </th:block>
 
-            <!-- STUDENT only -->
-            <th:block th:if="${role == 'STUDENT'}">
-                <a href="/attendance/statistics-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤统计</a>
-            </th:block>
-        </nav>
-        <div class="sidebar-footer">
-            <span class="sidebar-user" th:text="${username}"></span>
-            <a href="/logout" class="sidebar-logout">退出</a>
+                <!-- STUDENT only -->
+                <th:block th:if="${role == 'STUDENT'}">
+                    <a href="/attendance/statistics-page" th:class="${currentPage == 'attendance'} ? 'nav-item active' : 'nav-item'">考勤统计</a>
+                </th:block>
+            </nav>
+            <div class="sidebar-footer">
+                <span class="sidebar-user" th:text="${username}"></span>
+                <div style="display:flex;gap:6px;">
+                    <button th:if="${role == 'STUDENT' || role == 'TEACHER'}" class="sidebar-logout" style="background:none;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.8);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;" onclick="openPwdModal()">修改密码</button>
+                    <a href="/logout" class="sidebar-logout">退出</a>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- 修改密码弹窗 -->
+        <div id="pwdModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:10000;justify-content:center;align-items:center;">
+            <div style="background:#fff;border-radius:8px;padding:24px;width:380px;box-shadow:0 8px 30px rgba(0,0,0,0.2);">
+                <h3 style="margin:0 0 16px;color:#2c3e50;">修改密码</h3>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-size:13px;color:#555;margin-bottom:4px;">旧密码</label>
+                    <input type="password" id="oldPwd" style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;" placeholder="请输入旧密码">
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-size:13px;color:#555;margin-bottom:4px;">新密码</label>
+                    <input type="password" id="newPwd" style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;" placeholder="请输入新密码">
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;color:#555;margin-bottom:4px;">确认新密码</label>
+                    <input type="password" id="confirmPwd" style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;" placeholder="请再次输入新密码">
+                </div>
+                <div id="pwdError" style="color:#e74c3c;font-size:13px;margin-bottom:12px;display:none;"></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button onclick="closePwdModal()" style="padding:6px 16px;border:1px solid #d1d5db;border-radius:4px;background:#fff;cursor:pointer;font-size:13px;">取消</button>
+                    <button onclick="submitChangePwd()" id="submitPwdBtn" style="padding:6px 16px;border:none;border-radius:4px;background:#2980b9;color:#fff;cursor:pointer;font-size:13px;">确认修改</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openPwdModal() {
+                document.getElementById('pwdModal').style.display = 'flex';
+                document.getElementById('oldPwd').value = '';
+                document.getElementById('newPwd').value = '';
+                document.getElementById('confirmPwd').value = '';
+                document.getElementById('pwdError').style.display = 'none';
+            }
+            function closePwdModal() {
+                document.getElementById('pwdModal').style.display = 'none';
+            }
+            function submitChangePwd() {
+                var oldPwd = document.getElementById('oldPwd').value.trim();
+                var newPwd = document.getElementById('newPwd').value.trim();
+                var confirmPwd = document.getElementById('confirmPwd').value.trim();
+                var err = document.getElementById('pwdError');
+                if (!oldPwd) { err.textContent = '请输入旧密码'; err.style.display = 'block'; return; }
+                if (!newPwd) { err.textContent = '请输入新密码'; err.style.display = 'block'; return; }
+                if (newPwd.length < 4) { err.textContent = '新密码长度不能少于4位'; err.style.display = 'block'; return; }
+                if (newPwd !== confirmPwd) { err.textContent = '两次输入的新密码不一致'; err.style.display = 'block'; return; }
+                var btn = document.getElementById('submitPwdBtn');
+                btn.disabled = true; btn.textContent = '修改中...';
+                fetch('/user/change-password', {
+                    method: 'PUT',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({oldPassword: oldPwd, newPassword: newPwd})
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    if (d.code === 1) {
+                        alert('密码修改成功，请重新登录');
+                        window.location.href = '/logout';
+                    } else {
+                        err.textContent = d.msg || '修改失败';
+                        err.style.display = 'block';
+                        btn.disabled = false; btn.textContent = '确认修改';
+                    }
+                })
+                .catch(function() {
+                    err.textContent = '网络错误，请重试';
+                    err.style.display = 'block';
+                    btn.disabled = false; btn.textContent = '确认修改';
+                });
+            }
+            document.getElementById('pwdModal').addEventListener('click', function(e) {
+                if (e.target === this) closePwdModal();
+            });
+        </script>
+    </th:block>
 </body>
 </html>

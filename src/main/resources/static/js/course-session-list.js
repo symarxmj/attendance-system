@@ -23,8 +23,9 @@ function loadList() {
                     '<td>' + fmtDate(r.sessionDate) + '</td><td>' + (r.weekNumber || '') + '</td>' +
                     '<td>' + (r.status === 1 ? '进行中' : '已结束') + '</td>' +
                     '<td><div class="action-cell">' +
+                    (myRole === 'TEACHER' ? '<span style="color:#9ca3af;font-size:12px;">仅管理员可操作</span>' :
                     '<a class="btn-action btn-edit" href="/course-session/edit-page/' + r.sessionId + '">编辑</a>' +
-                    '<button class="btn-action btn-delete" onclick="handleDelete(' + r.sessionId + ')">删除</button>' +
+                    '<button class="btn-action btn-delete" onclick="handleDelete(' + r.sessionId + ')">删除</button>') +
                     '</div></td></tr>';
             });
             tbody.innerHTML = html;

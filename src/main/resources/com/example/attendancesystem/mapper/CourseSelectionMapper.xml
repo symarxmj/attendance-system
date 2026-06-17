@@ -50,4 +50,12 @@
         delete from course_selection where student_id = #{studentId}
     </delete>
 
+    <select id="findByCourseId" resultType="com.example.attendancesystem.entity.CourseSelection">
+        select cs.*, s.student_name, c.course_name
+        from course_selection cs
+        left join student s on cs.student_id = s.student_id
+        left join course c on cs.course_id = c.course_id
+        where cs.course_id = #{courseId}
+    </select>
+
 </mapper>

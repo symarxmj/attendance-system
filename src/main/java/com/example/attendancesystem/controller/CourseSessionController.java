@@ -17,7 +17,7 @@ public class CourseSessionController {
     @Autowired
     private CourseSessionService courseSessionService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Result insert(@RequestBody CourseSession session) {
         log.info("新增课次：{}", session);
@@ -25,7 +25,7 @@ public class CourseSessionController {
         return Result.success("新增成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{sessionId}")
     public Result delete(@PathVariable Long sessionId) {
         log.info("删除课次：{}", sessionId);
@@ -33,7 +33,7 @@ public class CourseSessionController {
         return Result.success("删除成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{sessionId}")
     public Result update(@PathVariable Long sessionId, @RequestBody CourseSession session) {
         log.info("修改课次：{}", sessionId);

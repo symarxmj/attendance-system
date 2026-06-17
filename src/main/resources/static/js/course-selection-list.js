@@ -24,8 +24,9 @@ function loadList() {
                     '<td>' + escHtml(r.courseName || r.courseId) + '</td>' +
                     '<td>' + (r.selectTime ? r.selectTime.substring(0, 16) : '') + '</td>' +
                     '<td><div class="action-cell">' +
+                    (myRole === 'TEACHER' ? '<span style="color:#9ca3af;font-size:12px;">仅管理员可操作</span>' :
                     '<a class="btn-action btn-edit" href="/course-selection/edit-page/' + r.id + '">编辑</a>' +
-                    '<button class="btn-action btn-delete" onclick="handleDelete(' + r.id + ')">删除</button>' +
+                    '<button class="btn-action btn-delete" onclick="handleDelete(' + r.id + ')">删除</button>') +
                     '</div></td></tr>';
             });
             tbody.innerHTML = html;

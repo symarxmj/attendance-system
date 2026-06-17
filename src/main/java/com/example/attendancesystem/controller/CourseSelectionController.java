@@ -17,7 +17,7 @@ public class CourseSelectionController {
     @Autowired
     private CourseSelectionService courseSelectionService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Result insert(@RequestBody CourseSelection cs) {
         log.info("新增选课：{}", cs);
@@ -25,7 +25,7 @@ public class CourseSelectionController {
         return Result.success("新增成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long id) {
         log.info("删除选课：{}", id);
@@ -33,7 +33,7 @@ public class CourseSelectionController {
         return Result.success("删除成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Result update(@PathVariable Long id, @RequestBody CourseSelection cs) {
         log.info("修改选课：{}", id);

@@ -39,8 +39,8 @@ async function loadStudents() {
                         <td>${escHtml(s.gender || '-')}</td>
                         <td>${s.createTime ? s.createTime.substring(0, 10) : '-'}</td>
                         <td class="action-cell">
-                            <a class="btn-action btn-edit" href="/student/edit-page/${escHtml(s.studentId)}">编辑</a>
-                            <button class="btn-action btn-delete" onclick="handleDelete('${escHtml(s.studentId)}', '${escHtml(s.studentName)}')">删除</button>
+                            ${myRole !== 'TEACHER' ? `<a class="btn-action btn-edit" href="/student/edit-page/${escHtml(s.studentId)}">编辑</a>
+                            <button class="btn-action btn-delete" onclick="handleDelete('${escHtml(s.studentId)}', '${escHtml(s.studentName)}')">删除</button>` : `<span style="color:#9ca3af;font-size:12px;">仅管理员可操作</span>`}
                         </td>
                     </tr>
                 `).join('');

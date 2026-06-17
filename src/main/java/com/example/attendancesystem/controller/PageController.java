@@ -5,6 +5,7 @@ import com.example.attendancesystem.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ public class PageController {
     public String studentList(Model m, Principal p, Authentication a) { addCommon(m,p,a,"student"); return "student-list"; }
     @GetMapping("/student/add-page")
     public String addPage(Model m, Principal p, Authentication a) { addCommon(m,p,a,"student"); m.addAttribute("student",new Student()); return "student-form"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/student/edit-page/{studentId}")
     public String editPage(@PathVariable String studentId, Model m, Principal p, Authentication a) { addCommon(m,p,a,"student"); m.addAttribute("student",studentService.findById(studentId)); return "student-form"; }
     @GetMapping("/student/import-page")
@@ -56,32 +58,40 @@ public class PageController {
     // ========== 教室管理 ==========
     @GetMapping("/classroom/list-page")
     public String classroomList(Model m, Principal p, Authentication a) { addCommon(m,p,a,"classroom"); return "classroom-list"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/classroom/add-page")
     public String classroomAddPage(Model m, Principal p, Authentication a) { addCommon(m,p,a,"classroom"); m.addAttribute("classroom",new Classroom()); return "classroom-form"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/classroom/edit-page/{id}")
     public String classroomEditPage(@PathVariable Integer id, Model m, Principal p, Authentication a) { addCommon(m,p,a,"classroom"); m.addAttribute("classroom",classroomService.findById(id)); return "classroom-form"; }
 
     // ========== 课程管理 ==========
     @GetMapping("/course/list-page")
     public String courseList(Model m, Principal p, Authentication a) { addCommon(m,p,a,"course"); return "course-list"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course/add-page")
     public String courseAddPage(Model m, Principal p, Authentication a) { addCommon(m,p,a,"course"); m.addAttribute("course",new Course()); return "course-form"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course/edit-page/{courseId}")
     public String courseEditPage(@PathVariable String courseId, Model m, Principal p, Authentication a) { addCommon(m,p,a,"course"); m.addAttribute("course",courseService.findById(courseId)); return "course-form"; }
 
     // ========== 课次管理 ==========
     @GetMapping("/course-session/list-page")
     public String sessionList(Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSession"); return "course-session-list"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course-session/add-page")
     public String sessionAddPage(Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSession"); m.addAttribute("session",new CourseSession()); return "course-session-form"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course-session/edit-page/{sessionId}")
     public String sessionEditPage(@PathVariable Long sessionId, Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSession"); m.addAttribute("session",courseSessionService.findById(sessionId)); return "course-session-form"; }
 
     // ========== 选课管理 ==========
     @GetMapping("/course-selection/list-page")
     public String selectionList(Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSelection"); return "course-selection-list"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course-selection/add-page")
     public String selectionAddPage(Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSelection"); m.addAttribute("selection",new CourseSelection()); return "course-selection-form"; }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/course-selection/edit-page/{id}")
     public String selectionEditPage(@PathVariable Long id, Model m, Principal p, Authentication a) { addCommon(m,p,a,"courseSelection"); m.addAttribute("selection",courseSelectionService.findById(id)); return "course-selection-form"; }
 

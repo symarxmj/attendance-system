@@ -10,6 +10,7 @@ import java.util.Map;
 
 public interface AttendanceService {
     String checkIn(Long sessionId, String studentId, String ip);
+    String checkInForce(Long sessionId, String studentId, String status);
     Map<Long, Attendance> getTodayAttendanceMap(String studentId, List<Long> sessionIds);
     void delete(Long id);
     void updateStatus(Long id, String status);
@@ -19,4 +20,10 @@ public interface AttendanceService {
     StatisticsDTO getStudentStatistics(String studentId);
 
     void deleteByStudentId(String studentId);
+
+    void autoMarkAbsent(Long sessionId, String studentId);
+
+    void autoMarkAbsentForSession(Long sessionId);
+
+    List<Map<String, Object>> getAttendanceByCourse(String courseId);
 }

@@ -9,7 +9,7 @@
 <body>
     <div th:insert="fragments/sidebar :: sidebar"></div>
     <div class="main-content"><div class="container">
-        <div class="page-header"><h2>课次管理</h2><a href="/course-session/add-page" class="btn">+ 新增课次</a></div>
+        <div class="page-header"><h2>课次管理</h2><a href="/course-session/add-page" class="btn" th:if="${role != 'TEACHER'}">+ 新增课次</a></div>
         <div class="filter-bar">
             <input type="text" id="filterCourseId" placeholder="课程编号">
             <input type="date" id="filterDate" placeholder="上课日期">
@@ -26,6 +26,7 @@
             <button id="nextBtn" onclick="changePage(1)">下一页</button>
         </div>
     </div></div>
+    <script th:inline="javascript">var myRole = /*[[${role}]]*/ '';</script>
     <script src="/js/course-session-list.js"></script>
 </body>
 </html>

@@ -21,9 +21,16 @@ async function loadTodaySessions() {
                 var label = statusLabel(s.status);
                 statusHtml = '<span class="tag-checked">' + label + '</span>';
                 actionHtml = '<span style="color:#95a5a6;font-size:13px;">' + escHtml(s.checkInTime ? s.checkInTime.substring(0,16).replace('T',' ') : '') + '</span>';
-            } else {
+            } else if (s.notStarted) {
+                statusHtml = '<span class="tag-waiting" style="background:#eaf2f8;color:#2980b9;">未开始</span>';
+                actionHtml = '<span style="color:#95a5a6;font-size:13px;">暂不可签到</span>';
+            } else if (s.canCheckIn) {
                 statusHtml = '<span class="tag-waiting">未签到</span>';
                 actionHtml = '<button class="btn-checkin" onclick="doCheckIn(' + s.sessionId + ', this)">签到</button>';
+            } else {
+                // 超过20分钟，不可签到
+                statusHtml = '<span style="display:inline-block;padding:4px 12px;border-radius:12px;font-size:13px;background:#fdedec;color:#e74c3c;">缺勤</span>';
+                actionHtml = '<span style="color:#95a5a6;font-size:13px;">已截止</span>';
             }
             html += '<tr>' +
                 '<td>' + escHtml(s.courseName) + '</td>' +

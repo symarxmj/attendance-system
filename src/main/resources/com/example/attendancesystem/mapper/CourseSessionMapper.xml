@@ -37,6 +37,10 @@
         select * from course_session where session_id = #{sessionId}
     </select>
 
+    <select id="findByCourseId" resultType="com.example.attendancesystem.entity.CourseSession">
+        select * from course_session where course_id = #{courseId} order by session_date desc
+    </select>
+
     <select id="list" resultType="com.example.attendancesystem.entity.CourseSession">
         select cs.*, c.course_name
         from course_session cs

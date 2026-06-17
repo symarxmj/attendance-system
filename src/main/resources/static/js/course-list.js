@@ -28,8 +28,9 @@ function loadList() {
                     '<td>' + (wdMap[r.weekday] || '') + '</td>' +
                     '<td>' + (r.startWeek||'') + '-' + (r.endWeek||'') + '</td>' +
                     '<td><div class="action-cell">' +
+                    (myRole === 'TEACHER' ? '<span style="color:#9ca3af;font-size:12px;">仅管理员可操作</span>' :
                     '<a class="btn-action btn-edit" href="/course/edit-page/' + encodeURIComponent(r.courseId) + '">编辑</a>' +
-                    '<button class="btn-action btn-delete" onclick="handleDelete(\'' + escHtml(r.courseId) + '\')">删除</button>' +
+                    '<button class="btn-action btn-delete" onclick="handleDelete(\'' + escHtml(r.courseId) + '\')">删除</button>') +
                     '</div></td></tr>';
             });
             tbody.innerHTML = html;

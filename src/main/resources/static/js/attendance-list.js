@@ -25,7 +25,8 @@ function loadList() {
             rows.forEach(function(r) {
                 var chkTime = r.checkInTime;
                 var timeStr = chkTime ? (typeof chkTime === 'string' ? chkTime : '').substring(0, 16).replace('T', ' ') : '';
-                html += '<tr><td>' + r.id + '</td><td>' + r.sessionId + '</td><td>' + escHtml(r.studentId) + '</td>' +
+                html += '<tr><td>' + r.id + '</td><td>' + escHtml(r.courseName || r.courseId || '-') + '</td><td>' + escHtml(r.studentId) + '</td>' +
+                    '<td>' + escHtml(r.studentName || '-') + '</td>' +
                     '<td>' + timeStr + '</td>' +
                     '<td>' + statusTag(r.status) + '</td><td>' + escHtml(r.ip || '-') + '</td>' +
                     '<td><div class="action-cell">' +

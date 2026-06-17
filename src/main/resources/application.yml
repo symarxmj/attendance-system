@@ -11,11 +11,23 @@ spring:
   servlet:
     multipart:
       enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
 
 mybatis:
   type-aliases-package: com.example.attendancesystem.entity
   configuration:
     map-underscore-to-camel-case: true
+
+## 本地配置
+#file:
+#  upload:
+#    path: D:/Code_JavaStudy/upload_file/
+
+# 服务器配置
+file:
+  upload:
+    path: /opt/attendance-system/upload_file/
 
 logging:
   pattern:

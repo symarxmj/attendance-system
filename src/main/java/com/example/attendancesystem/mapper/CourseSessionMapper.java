@@ -16,4 +16,6 @@ public interface CourseSessionMapper {
     void update(CourseSession session);
     CourseSession findById(Long sessionId);
     List<CourseSession> list(CourseSessionQueryParam param);
+
+    List<CourseSession> findByCourseId(@Param("courseId") String courseId);
 }

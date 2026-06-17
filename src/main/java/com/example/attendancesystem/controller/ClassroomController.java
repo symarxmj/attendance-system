@@ -17,7 +17,7 @@ public class ClassroomController {
     @Autowired
     private ClassroomService classroomService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Result insert(@RequestBody Classroom classroom) {
         log.info("新增教室：{}", classroom);
@@ -25,7 +25,7 @@ public class ClassroomController {
         return Result.success("新增成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         log.info("删除教室ID：{}", id);
@@ -33,7 +33,7 @@ public class ClassroomController {
         return Result.success("删除成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Result update(@PathVariable Integer id, @RequestBody Classroom classroom) {
         log.info("修改教室ID：{}", id);

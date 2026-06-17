@@ -8,7 +8,7 @@
     <style>
         .stats-card {
             background: #fff; border-radius: 8px; padding: 24px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.08); max-width: 700px; margin: 0 auto;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08); max-width: 700px; margin: 0 auto 32px;
         }
         .select-row { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; }
         .select-row select { flex:1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
@@ -23,6 +23,29 @@
         .rate-bar-bg { background: #e5e7eb; border-radius: 10px; height: 20px; overflow: hidden; }
         .rate-bar-fill { height: 100%; border-radius: 10px; transition: width .5s; background: linear-gradient(90deg, #3b82f6, #7c3aed); }
         .empty-hint { text-align: center; color: #9ca3af; padding: 60px 0; }
+
+        /* 按课程查看表格 */
+        .course-card {
+            background: #fff; border-radius: 8px; padding: 24px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08); max-width: 1100px; margin: 0 auto;
+        }
+        .table-wrap { overflow-x: auto; }
+        .table-wrap table { width: 100%; border-collapse: collapse; }
+        .table-wrap th { background: #34495e; color: #fff; padding: 10px 12px; text-align: left; font-size: 13px; }
+        .table-wrap td { padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .table-wrap tr:hover td { background: #fafafa; }
+        .btn-action { padding: 4px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 4px; }
+        .btn-delete { background: #e74c3c; color: #fff; }
+        .btn-delete:hover { background: #c0392b; }
+        .section-title { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 16px; }
+        .toast-notification {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+            background: #27ae60; color: #fff; padding: 12px 32px; border-radius: 6px;
+            font-size: 14px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: opacity 0.3s;
+        }
+        .toast-notification.toast-fade { opacity: 0; }
+        .toast-error { background: #e74c3c; }
     </style>
 </head>
 <body>
@@ -46,6 +69,28 @@
 
                 <div id="statsContent">
                     <div class="empty-hint">加载中...</div>
+                </div>
+            </div>
+
+            <!-- ADMIN/TEACHER: 按课程查看 -->
+            <div class="course-card" th:if="${role == 'ADMIN' || role == 'TEACHER'}">
+                <div class="section-title">按课程查看</div>
+                <div class="select-row">
+                    <label style="white-space:nowrap;font-weight:500;">选择课程：</label>
+                    <select id="courseSelect" onchange="loadCourseAttendance()">
+                        <option value="">-- 请选择课程 --</option>
+                    </select>
+                    <button class="btn" onclick="exportCSV()" id="exportBtn" disabled>导出CSV</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>学号</th><th>姓名</th><th>签到时间</th><th>签到状态</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="courseTableBody">
+                            <tr><td colspan="5" class="empty-hint">请选择课程查看考勤记录</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

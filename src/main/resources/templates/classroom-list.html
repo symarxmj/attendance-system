@@ -12,7 +12,7 @@
         <div class="container">
             <div class="page-header">
                 <h2>教室管理</h2>
-                <a href="/classroom/add-page" class="btn">+ 新增教室</a>
+                <a href="/classroom/add-page" class="btn" id="btnAdd" th:if="${role != 'TEACHER'}">+ 新增教室</a>
             </div>
             <div class="filter-bar">
                 <input type="text" id="filterId" placeholder="教室ID">
@@ -45,6 +45,7 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript">var myRole = /*[[${role}]]*/ '';</script>
     <script src="/js/classroom-list.js"></script>
 </body>
 </html>

@@ -19,4 +19,10 @@ public class Attendance {
     private String status;
     private String ip;
     private LocalDateTime createTime;
+
+    // 非持久化字段，用于 JOIN 展示
+    private String courseName;
+    private String studentName;
+    private String courseId;
+    private LocalDateTime sessionDate;
 }

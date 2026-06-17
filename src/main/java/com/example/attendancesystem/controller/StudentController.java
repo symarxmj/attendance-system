@@ -56,7 +56,7 @@ public class StudentController {
     }
 
     // 根据学号删除学生 —— 级联删除 user / attendance / course_selection
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{studentId}")
     @Transactional
     public Result deleteStudent(@PathVariable String studentId){
@@ -83,7 +83,7 @@ public class StudentController {
     }
 
     // 根据学号修改学生信息 —— 同时同步 user.realName
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{studentId}")
     @Transactional
     public Result updateStudent(@PathVariable String studentId, @RequestBody Student student){

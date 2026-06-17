@@ -17,7 +17,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Result insert(@RequestBody Course course) {
         log.info("新增课程：{}", course);
@@ -25,7 +25,7 @@ public class CourseController {
         return Result.success("新增成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{courseId}")
     public Result delete(@PathVariable String courseId) {
         log.info("删除课程：{}", courseId);
@@ -33,7 +33,7 @@ public class CourseController {
         return Result.success("删除成功");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{courseId}")
     public Result update(@PathVariable String courseId, @RequestBody Course course) {
         log.info("修改课程：{}", courseId);

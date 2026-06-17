@@ -41,22 +41,39 @@
     </select>
 
     <select id="list" resultType="com.example.attendancesystem.entity.Attendance">
-        select * from attendance
+        select a.*, s.student_name, cs.course_id, c.course_name, cs.session_date
+        from attendance a
+        left join student s on a.student_id = s.student_id
+        left join course_session cs on a.session_id = cs.session_id
+        left join course c on cs.course_id = c.course_id
         <where>
             <if test="sessionId != null">
-                and session_id = #{sessionId}
+                and a.session_id = #{sessionId}
             </if>
             <if test="studentId != null and studentId != ''">
-                and student_id = #{studentId}
+                and a.student_id = #{studentId}
             </if>
             <if test="status != null and status != ''">
-                and status = #{status}
+                and a.status = #{status}
             </if>
             <if test="begin != null and end != null">
-                and check_in_time between #{begin} and #{end}
+                and a.check_in_time between #{begin} and #{end}
             </if>
         </where>
-        order by id desc
+        order by a.id desc
+    </select>
+
+    <select id="findBySessionIds" resultType="com.example.attendancesystem.entity.Attendance">
+        select a.*, s.student_name, cs.course_id, c.course_name, cs.session_date
+        from attendance a
+        left join student s on a.student_id = s.student_id
+        left join course_session cs on a.session_id = cs.session_id
+        left join course c on cs.course_id = c.course_id
+        where a.session_id in
+        <foreach collection="sessionIds" item="sid" open="(" separator="," close=")">
+            #{sid}
+        </foreach>
+        order by a.session_id, a.student_id
     </select>
 
     <select id="countByStudentId" resultType="long">

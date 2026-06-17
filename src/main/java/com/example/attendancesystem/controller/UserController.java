@@ -14,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -116,6 +118,35 @@ public class UserController {
             user.setPassword(null);
         }
         return Result.success(pageResult);
+    }
+
+    // 修改自己的密码
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
+    @PutMapping("/change-password")
+    public Result changePassword(@RequestBody Map<String, String> body, Principal principal) {
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+        if (oldPassword == null || oldPassword.isEmpty()) {
+            return Result.error("请输入旧密码");
+        }
+        if (newPassword == null || newPassword.isEmpty()) {
+            return Result.error("请输入新密码");
+        }
+        if (newPassword.length() < 4) {
+            return Result.error("新密码长度不能少于4位");
+        }
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return Result.error("旧密码错误");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.updateUser(user);
+        log.info("用户 {} 修改了密码", username);
+        return Result.success("密码修改成功");
     }
 
     // 为新增的学生用户同步创建 student 记录
